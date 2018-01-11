@@ -50,10 +50,18 @@ var resqueJobs = {
 
       msgData._id = notification._id;
 
+      if (!campaign.application.fcmServerKey) {
+        throw new Error('FCM Server Key not found');
+      }
+
+      var fcm = new FCM(campaign.application.fcmServerKey);
+
+      var message = {};
+
       switch (notification.appUser.userDevice.devicePlatform) {
         case 'Android':
           {
-            var androidMessage = {
+            message = {
               to: notification.appUser.userDevice.deviceToken,
               collapse_key: notification.campaign._id, // we use campagin id as collapse key
               // priority: 'high',
@@ -63,58 +71,66 @@ var resqueJobs = {
               data: msgData
             };
             console.log('sending Android', JSON.stringify(androidMessage));
-            if (!campaign.application.fcmServerKey) {
-              throw new Error('FCM Server Key not found');
-            }
-
-            var fcm = new FCM(campaign.application.fcmServerKey);
-            return fcm.send(androidMessage).then(function(response) {
-              notification.status = 2;
-              console.log(chalk.green('Successfully sent!'));
-              console.log(response);
-              return notification.save();
-            }).catch(function(err) {
-              notification.status = 1;
-              console.log(chalk.red('Something has gone wrong on sending PN!'));
-              console.log(err);
-              return notification.save();
-            });
+            
           }
           break;
         case 'iOS':
           {
-            var keyPem = campaign.application.keyPem;
-            var certPem = campaign.application.certPem;
-            if (!keyPem || !certPem) {
-              throw new Error('Key Pem or Cert Pem not found!')
-            }
-            var keyBuffer = Buffer.from(keyPem, 'utf8');
-            var certBuffer = Buffer.from(certPem, 'utf8');
-            var provider = new apn.Provider({
-              cert: certBuffer,
-              key: keyBuffer
-            });
-            var iOSNotification = new apn.Notification();
-            iOSNotification.sound = 'ping.aiff';
-            iOSNotification.alert = 'notification from dynamic push'; // @TODO change it to config or db
-            iOSNotification.payload = msgData;
-            console.log('sending iOS', JSON.stringify(iOSNotification));
-            return provider.send(iOSNotification, notification.appUser.userDevice.deviceToken)
-              .then(function(response) {
-                notification.status = 2;
-                console.log(chalk.green('Successfully sent!'));
-                console.log(response);
-                return notification.save();
-              })
-              .catch(function(err) {
-                notification.status = 1;
-                console.log(chalk.red('Something has gone wrong on sending PN!'));
-                console.log(err);
-                return notification.save();
-              });
+            message = {
+              to: notification.appUser.userDevice.deviceToken,
+              collapse_key: notification.campaign._id, // we use campagin id as collapse key
+              // priority: 'high',
+              // contentAvailable: true,
+              // delayWhileIdle: true,
+              // timeToLive: 3,
+              data: msgData
+            };
+            console.log('sending iOS', JSON.stringify(androidMessage));
+
+            // var keyPem = campaign.application.keyPem;
+            // var certPem = campaign.application.certPem;
+            // if (!keyPem || !certPem) {
+            //   throw new Error('Key Pem or Cert Pem not found!')
+            // }
+            // var keyBuffer = Buffer.from(keyPem, 'utf8');
+            // var certBuffer = Buffer.from(certPem, 'utf8');
+            // var provider = new apn.Provider({
+            //   cert: certBuffer,
+            //   key: keyBuffer
+            // });
+            // var iOSNotification = new apn.Notification();
+            // iOSNotification.sound = 'ping.aiff';
+            // iOSNotification.alert = 'notification from dynamic push'; // @TODO change it to config or db
+            // iOSNotification.payload = msgData;
+            // console.log('sending iOS', JSON.stringify(iOSNotification));
+            // return provider.send(iOSNotification, notification.appUser.userDevice.deviceToken)
+            //   .then(function(response) {
+            //     notification.status = 2;
+            //     console.log(chalk.green('Successfully sent!'));
+            //     console.log(response);
+            //     return notification.save();
+            //   })
+            //   .catch(function(err) {
+            //     notification.status = 1;
+            //     console.log(chalk.red('Something has gone wrong on sending PN!'));
+            //     console.log(err);
+            //     return notification.save();
+            //   });
           }
           break;
       }
+
+      return fcm.send(message).then(function(response) {
+        notification.status = 2;
+        console.log(chalk.green('Successfully sent!'));
+        console.log(response);
+        return notification.save();
+      }).catch(function(err) {
+        notification.status = 1;
+        console.log(chalk.red('Something has gone wrong on sending PN!'));
+        console.log(err);
+        return notification.save();
+      });
     })
     .then(function() {
       callback('success!');
