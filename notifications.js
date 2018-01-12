@@ -40,7 +40,14 @@ var resqueJobs = {
       if (campaign.animation) {
         campaign.animation.expiresAt = campaign.animation.duration * campaign.loopCount + (campaign.loopCount - 1) * campaign.loopDelay;
       }
-      var msgData = _.pick(campaign, 'animation', 'message', 'messagePosition', 'url', 'campaignType', 'loopDelay', 'loopCount');
+
+      var content = _.pick(campaign, 'message', 'messagePosition', 'url', 'campaignType', 'loopDelay', 'loopCount');
+      var msgData = {
+        attachment: {
+          animation: campaign.animation,
+          content
+        }
+      }
 
       // supplying display type (nova, supernova, dpi...)
       var platformIndex = _.findIndex(campaign.platform, { name: notification.appUser.userDevice.devicePlatform.toLowerCase() });
@@ -56,6 +63,8 @@ var resqueJobs = {
 
       var fcm = new FCM(campaign.application.fcmServerKey);
 
+      console.log('fcm api key:', campaign.application.fcmServerKey);
+
       var message = {};
 
       switch (notification.appUser.userDevice.devicePlatform) {
@@ -65,12 +74,12 @@ var resqueJobs = {
               to: notification.appUser.userDevice.deviceToken,
               collapse_key: notification.campaign._id, // we use campagin id as collapse key
               // priority: 'high',
-              // contentAvailable: true,
+              content_available: true,
               // delayWhileIdle: true,
               // timeToLive: 3,
               data: msgData
             };
-            console.log('sending Android', JSON.stringify(androidMessage));
+            console.log('sending Android', JSON.stringify(message));
             
           }
           break;
@@ -80,12 +89,16 @@ var resqueJobs = {
               to: notification.appUser.userDevice.deviceToken,
               collapse_key: notification.campaign._id, // we use campagin id as collapse key
               // priority: 'high',
-              // contentAvailable: true,
+              mutable_content: true,
               // delayWhileIdle: true,
               // timeToLive: 3,
+              notification: {
+                title: campaign.title,
+                body: 'Give it back if you finished you tests !'
+              },
               data: msgData
             };
-            console.log('sending iOS', JSON.stringify(androidMessage));
+            console.log('sending iOS', JSON.stringify(message));
 
             // var keyPem = campaign.application.keyPem;
             // var certPem = campaign.application.certPem;
