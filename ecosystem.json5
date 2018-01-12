@@ -1,7 +1,7 @@
 {
   apps: [
     {
-      name: "DP-MEAN",
+      name: "M3",
       script: "server.js",
       env_production: {
         NODE_ENV: "production"
@@ -23,9 +23,9 @@
   ],
   deploy: {
     development: {
-      key: "./pem/dp-mean.pem",
+      key: "./pem/m3.pem",
       user: "ubuntu",
-      host: "52.5.146.255",
+      host: "dev.m3solution.com",
       ref: "origin/dev",
       repo: "git@bitbucket.org:cmodels/dp-mean-stack.git",
       path: "/srv/dp-mean",
