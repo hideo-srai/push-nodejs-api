@@ -32,6 +32,16 @@
       "pre-deploy": "",
       "post-deploy": "nvm use 6.9; npm install; grunt build; pm2 startOrRestart ecosystem.json5 --env development"
     },
+    stage: {
+      key: "../pem/m3.pem",
+      user: "ubuntu",
+      host: "stage.m3solution.com",
+      ref: "origin/dev",
+      repo: "git@bitbucket.org:m3web/m3-web-api.git",
+      path: "/srv/dp-mean",
+      "pre-deploy": "",
+      "post-deploy": "nvm use 6.9; npm install; grunt build; pm2 startOrRestart ecosystem.json5 --env development"
+    },
     production: {
       key: "../pem/m3.pem",
       user: "ubuntu",
