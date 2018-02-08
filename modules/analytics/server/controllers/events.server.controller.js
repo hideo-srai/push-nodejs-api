@@ -139,7 +139,7 @@ exports.getEventsCountByWidgets = function(req, res) {
   }).then(function(devices) {
     var deviceIds = _.map(devices, '_id');
     var eventFilter = {
-      eventTarget: { $in: ['notification'] },
+      eventTarget: { $in: ['widget', 'notification'] },
       eventType: { $in: ['click', 'receive'] },
       eventValue: { $in: ['dpi', 'nova', 'supernova', 'meganova'] },
       created: {
@@ -153,7 +153,7 @@ exports.getEventsCountByWidgets = function(req, res) {
       $match: eventFilter
     }, {
       $group: {
-        _id: { eventValue: '$eventValue', eventType: '$eventType' },
+        _id: { eventValue: '$eventValue', eventTarget: '$eventTarget', eventType: '$eventType' },
         total: { $sum: 1 }
       }
     }, {
@@ -162,6 +162,7 @@ exports.getEventsCountByWidgets = function(req, res) {
         values: {
           $push: {
             eventType: '$_id.eventType',
+            eventTarget: '$_id.eventTarget',
             count: '$total'
           },
         }
