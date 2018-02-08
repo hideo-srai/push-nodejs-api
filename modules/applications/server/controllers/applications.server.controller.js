@@ -12,6 +12,7 @@ var path = require('path'),
   config = require(path.resolve('./config/config')),
   Application = mongoose.model('Application'),
   Segment = mongoose.model('Segment'),
+  CustomEventModel = mongoose.model('CustomEvent'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
 
 /**
@@ -30,6 +31,7 @@ exports.create = function (req, res) {
         message: errorHandler.getErrorMessage(err)
       });
     } else {
+      // Populating default objects for a new application
       var segment = new Segment({
         name: 'All',
         application: application._id,
@@ -43,6 +45,19 @@ exports.create = function (req, res) {
           console.log('Default segment created for application', application._id);
         }
       });
+
+      config.customEvents.forEach(function (elem) {
+        var customEvent = new CustomEventModel(elem);
+        customEvent.application = application._id;
+        customEvent.save(function (err) {
+          if (err) {
+            console.log(err);
+          } else {
+            console.log('Custom event created for application', application._id);
+          }
+        });
+      });
+
       res.json(application);
     }
   });

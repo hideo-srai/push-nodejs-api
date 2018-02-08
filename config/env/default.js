@@ -39,5 +39,21 @@ module.exports = {
   },
   email: {
     from: 'no-reply@dynamicpush.com'
-  }
+  },
+  customEvents: [{
+    name: 'DP Sent',
+    eventValue: '',
+    eventTarget: 'notification',
+    eventType: 'receive'
+  }, {
+    name: 'DP Clicked',
+    eventValue: '',
+    eventTarget: 'notification',
+    eventType: 'click'
+  }, {
+    name: 'Nova Sent',
+    eventValue: 'nova',
+    eventTarget: 'notification',
+    eventType: 'receive'
+  }]
 };
