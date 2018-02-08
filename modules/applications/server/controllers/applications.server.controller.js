@@ -11,6 +11,7 @@ var path = require('path'),
   multer = require('multer'),
   config = require(path.resolve('./config/config')),
   Application = mongoose.model('Application'),
+  Segment = mongoose.model('Segment'),
   errorHandler = require(path.resolve('./modules/core/server/controllers/errors.server.controller'));
 
 /**
@@ -29,6 +30,18 @@ exports.create = function (req, res) {
         message: errorHandler.getErrorMessage(err)
       });
     } else {
+      var segment = new Segment({
+        name: 'All',
+        application: application._id,
+        filter: JSON.stringify({})
+      });
+      segment.save(function (err) {
+        if (err) {
+          console.log(err);
+        } else {
+          console.log('Default segment created for application', application._id);
+        }
+      });
       res.json(application);
     }
   });
