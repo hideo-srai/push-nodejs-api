@@ -36,6 +36,10 @@ var SegmentSchema = new Schema({
   status: {
     type: String,
     default: 'ACTIVE'
+  },
+  isDefault: {
+    type: Boolean,
+    default: false
   }
 });
 

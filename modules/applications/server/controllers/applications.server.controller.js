@@ -33,7 +33,8 @@ exports.create = function (req, res) {
       var segment = new Segment({
         name: 'All',
         application: application._id,
-        filter: JSON.stringify({})
+        filter: JSON.stringify({}),
+        isDefault: true
       });
       segment.save(function (err) {
         if (err) {
