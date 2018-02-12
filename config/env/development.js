@@ -85,7 +85,7 @@ module.exports = {
       seedSuperAdmin: {
         username: process.env.MONGO_SEED_USER_USERNAME || 'superadmin',
         provider: 'local',
-        email: process.env.MONGO_SEED_USER_EMAIL || 'superadmin@dynamicpush.com',
+        email: process.env.MONGO_SEED_USER_EMAIL || 'superadmin@m3solution.com',
         firstName: 'Super',
         lastName: 'Admin',
         role: 'superadmin',
@@ -94,7 +94,7 @@ module.exports = {
       seedAdmin: {
         username: process.env.MONGO_SEED_ADMIN_USERNAME || 'admin',
         provider: 'local',
-        email: process.env.MONGO_SEED_ADMIN_EMAIL || 'admin@dynamicpush.com',
+        email: process.env.MONGO_SEED_ADMIN_EMAIL || 'admin@m3solution.com',
         firstName: 'Admin',
         lastName: 'Local',
         role: 'admin',
@@ -103,7 +103,7 @@ module.exports = {
       seedUser: {
         username: process.env.MONGO_SEED_ADMIN_USERNAME || 'user',
         provider: 'local',
-        email: process.env.MONGO_SEED_ADMIN_EMAIL || 'user@dynamicpush.com',
+        email: process.env.MONGO_SEED_ADMIN_EMAIL || 'user@m3solution.com',
         firstName: 'User',
         lastName: 'Local',
         role: 'user',
