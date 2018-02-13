@@ -67,7 +67,7 @@ exports.getAudienceCounts = function(req, res) {
   .then(function(result) {
     var resp = {};
     _.each(result, function(agg) {
-      resp[agg[0]._id] = agg[0].count;
+      if (agg.length > 0) resp[agg[0]._id] = agg[0].count;
     });
     res.json(resp);
   })

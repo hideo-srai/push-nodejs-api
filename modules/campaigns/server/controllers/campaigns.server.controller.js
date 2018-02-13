@@ -63,6 +63,11 @@ exports.uploadImage = function (req, res) {
   var campaign = req.campaign;
   upload(req, res, function(uploadError) {
     if(uploadError) {
+      if (uploadError.code === 'LIMIT_FILE_SIZE') {
+        return res.status(413).send({
+          message: 'File is too large to upload.'
+        });
+      }
       return res.status(400).send({
         message: 'Error occurred while uploading picture'
       });

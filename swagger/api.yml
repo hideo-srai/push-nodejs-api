@@ -1705,6 +1705,39 @@ paths:
           schema:
             $ref: '#/definitions/Error'
 
+  /applications/{applicationId}/analytics/eventsCountByWidgets:
+    get:
+      summary: retrieve event analytics
+      description: |
+        retrieve number of events by widget type,
+        can filter by segment, start, end dates
+      parameters:
+        - name: applicationId
+          required: true
+          in: path
+          type: string
+        - name: segmentId
+          required: false
+          in: query
+          type: string
+        - name: startDate
+          required: false
+          in: query
+          type: string
+        - name: endDate
+          required: false
+          in: query
+          type: string
+      tags:
+        - Analytics
+      responses:
+        '200':
+          description: Array of event counts grouped
+        default:
+          description: Unexpected Error
+          schema:
+            $ref: '#/definitions/Error'
+
   /mobile/authenticate:
     post:
       summary: mobile sign in

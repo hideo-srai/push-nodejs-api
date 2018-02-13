@@ -2,8 +2,8 @@
 
 module.exports = {
   app: {
-    title: 'Dynamic Push',
-    description: 'Dynamic Push',
+    title: 'M3 Push',
+    description: 'M3 Push',
     keywords: 'mongodb, express, angularjs, node.js, mongoose, passport',
     googleAnalyticsTrackingID: process.env.GOOGLE_ANALYTICS_TRACKING_ID || 'GOOGLE_ANALYTICS_TRACKING_ID'
   },
@@ -20,7 +20,7 @@ module.exports = {
   uploads: {
     dest: './tmp/', // tmp uploads path
     limits: {
-      fileSize: 5*1024*1024 // Max file size in bytes (1 MB)
+      fileSize: 20*1024*1024 // Max file size in bytes (20 MB)
     }
   },
   redis: {
@@ -38,6 +38,22 @@ module.exports = {
     from: '+13476583205'
   },
   email: {
-    from: 'no-reply@dynamicpush.com'
-  }
+    from: 'no-reply@m3solution.com'
+  },
+  customEvents: [{
+    name: 'M3 Push Sent',
+    eventValue: '',
+    eventTarget: 'notification',
+    eventType: 'receive'
+  }, {
+    name: 'M3 Push Clicked',
+    eventValue: '',
+    eventTarget: 'notification',
+    eventType: 'click'
+  }, {
+    name: 'On Screen Sent',
+    eventValue: 'nova',
+    eventTarget: 'notification',
+    eventType: 'receive'
+  }]
 };

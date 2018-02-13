@@ -93,7 +93,7 @@ exports.sendVerifyToken = function(req, res) {
       // email
       return mailer.sendMail({
         to: req.query.email,
-        subject: 'Verification Code from Dynamic Push',
+        subject: 'Verification Code from M3 Push',
         text: 'Verification Code: ' + appUser.verifyToken
       }).then(function() {
         res.send({

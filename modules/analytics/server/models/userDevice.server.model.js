@@ -4,7 +4,12 @@
  * Module dependencies.
  */
 var mongoose = require('mongoose'),
+  validator = require('validator'),
   Schema = mongoose.Schema;
+
+var validateEmail = function (email) {
+  return validator.isEmail(email, { require_tld: false });
+};
 
 /**
  * UserDevice Schema
@@ -31,12 +36,14 @@ var UserDeviceSchema = new Schema({
   email: {
     type: String,
     trim: true,
-    default: ''
+    required: 'Email address is required',
+    lowercase: true,
+    validate: [validateEmail, 'Email address is invalid']
   },
   name: {
     type: String,
     trim: true,
-    default: ''
+    required: 'Name is required'
   },
   gender: {
     type: String

@@ -1,7 +1,7 @@
 {
   apps: [
     {
-      name: "M3",
+      name: "M3-API",
       script: "server.js",
       env_production: {
         NODE_ENV: "production"
@@ -11,7 +11,7 @@
       }
     },
     {
-      name: "Push notifications service",
+      name: "M3-PN-Service",
       script: "notifications.js",
       env_production: {
         NODE_ENV: "production"
@@ -23,7 +23,7 @@
   ],
   deploy: {
     development: {
-      key: "./pem/m3.pem",
+      key: "../pem/m3.pem",
       user: "ubuntu",
       host: "dev.m3solution.com",
       ref: "origin/dev",
@@ -32,15 +32,25 @@
       "pre-deploy": "",
       "post-deploy": "nvm use 6.9; npm install; grunt build; pm2 startOrRestart ecosystem.json5 --env development"
     },
+    stage: {
+      key: "../pem/m3.pem",
+      user: "ubuntu",
+      host: "stage.m3solution.com",
+      ref: "origin/dev",
+      repo: "git@bitbucket.org:m3web/m3-web-api.git",
+      path: "/srv/dp-mean",
+      "pre-deploy": "",
+      "post-deploy": "nvm use 6.9; npm install; grunt build; pm2 startOrRestart ecosystem.json5 --env development"
+    },
     production: {
-      key: "./pem/dp-mean.pem",
+      key: "../pem/m3.pem",
       user: "ubuntu",
       host: "52.6.70.119",
       ref: "origin/master",
-      repo: "git@bitbucket.org:cmodels/dp-mean-stack.git",
+      repo: "git@bitbucket.org:m3web/m3-web-api.git",
       path: "/srv/dp/dp-mean",
       "pre-deploy": "",
-      "post-deploy": "nvm use 6.9; npm install; grunt build; pm2 startOrRestart ecosystem.json5 --env development"
+      "post-deploy": "nvm use 6.9; npm install; grunt build; pm2 startOrRestart ecosystem.json5 --env production"
     }
   }
 }

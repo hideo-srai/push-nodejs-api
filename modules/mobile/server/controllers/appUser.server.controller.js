@@ -41,15 +41,14 @@ exports.updateUserDevice = function (req, res) {
 
   Promise.resolve()
   .then(function() {
-    var userDeviceData;
+    var userDeviceData = _.omit(req.body, '_id', '__v', 'created');
     if (currentAppUser.userDevice) {
-      userDeviceData = _.extend(currentAppUser.userDevice.toObject(), req.body);
+      userDevice = currentAppUser.userDevice;
+      _.assign(userDevice, userDeviceData);
     } else {
-      userDeviceData = req.body;
+      userDevice = new UserDevice(userDeviceData);
+      userDevice.appUser = currentAppUser._id;
     }
-    userDeviceData = _.omit(userDeviceData, '_id', '__v', 'created');
-    userDevice = new UserDevice(userDeviceData);
-    userDevice.appUser = currentAppUser._id;
     return userDevice.save();
   })
   .then(function() {
